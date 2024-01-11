@@ -16,4 +16,4 @@ function getWindowByName(name) {
 }
 
 
-module.exports = { saveWindows, deleteWindows, getWindowByName };
+module.exports = {saveWindows, deleteWindows, getWindowByName};

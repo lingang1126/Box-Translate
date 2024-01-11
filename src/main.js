@@ -1,11 +1,11 @@
 'use strict';
 // main.js
-const { app, BrowserWindow, ipcMain, screen, globalShortcut, desktopCapturer } = require('electron');
-const { createCanvas, Image } = require('canvas')
+const {app, BrowserWindow, ipcMain, screen, globalShortcut, desktopCapturer} = require('electron');
+const {createCanvas, Image} = require('canvas')
 const path = require('path');
 const fs = require('fs');
 // 内部文件
-const { setupIPCHandlers } = require('./main/ipcHandle/ipchandles.js');
+const {setupIPCHandlers} = require('./main/ipcHandle/ipchandles.js');
 const overlayWindowModule = require('./main/common/overlayWindowModule.js');
 const paths = require('./path.js');
 
@@ -17,51 +17,51 @@ let isShotTaskRunning = false;
 
 
 app.whenReady().then(() => {
-  // 在主线程中通过 IPC 通信获取渲染进程中的变量值
-  // const isSelecting = getIsSelecting();
-  mainWindow = createWindow();
-  // const overlayWindowModule = new OverlayWindowModule();
-  setupIPCHandlers(mainWindow);
+    // 在主线程中通过 IPC 通信获取渲染进程中的变量值
+    // const isSelecting = getIsSelecting();
+    mainWindow = createWindow();
+    // const overlayWindowModule = new OverlayWindowModule();
+    setupIPCHandlers(mainWindow);
 });
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
 });
 
 app.on('will-quit', () => {
-  // 注销所有快捷键
-  globalShortcut.unregisterAll();
+    // 注销所有快捷键
+    globalShortcut.unregisterAll();
 });
 
 function createWindow() {
-  const win = new BrowserWindow({
-    width: 1200,
-    height: 700,
-    webPreferences: {
-      nodeIntegration: true,
-      preload: paths.PRELOAD_SCRIPT,
-    },
-  });
+    const win = new BrowserWindow({
+        width: 1200,
+        height: 700,
+        webPreferences: {
+            nodeIntegration: true,
+            preload: paths.PRELOAD_SCRIPT,
+        },
+    });
 
-  win.loadFile(paths.INDEX_HTML);
-  win.webContents.openDevTools();
+    win.loadFile(paths.INDEX_HTML);
+    win.webContents.openDevTools();
 
-  return win;
+    return win;
 }
 
 
 ipcMain.handle('saveBitmap', (event, bitmapData, path) => {
-  const img = new Image()
-  img.src = bitmapData
+    const img = new Image()
+    img.src = bitmapData
 
-  const canvas = createCanvas(img.width, img.height)
-  const ctx = canvas.getContext('2d')
-  ctx.drawImage(img, 0, 0, img.width, img.height)
+    const canvas = createCanvas(img.width, img.height)
+    const ctx = canvas.getContext('2d')
+    ctx.drawImage(img, 0, 0, img.width, img.height)
 
-  const buffer = canvas.toBuffer('image/png')
-  fs.writeFileSync(path, buffer)
+    const buffer = canvas.toBuffer('image/png')
+    fs.writeFileSync(path, buffer)
 })
 
 

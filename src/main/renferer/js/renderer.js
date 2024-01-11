@@ -11,14 +11,14 @@ let outputResultHistory = [];
 
 // 在渲染进程中监听消息
 window.ipcRenderer.on('update-is-selecting', (event, isSelectingParam) => {
-  // 处理消息，更新渲染进程中的状态
-  console.log('Received update-is-selecting message:', isSelectingParam);
-  isSelecting = isSelectingParam
+    // 处理消息，更新渲染进程中的状态
+    console.log('Received update-is-selecting message:', isSelectingParam);
+    isSelecting = isSelectingParam
 });
 
 document.getElementById('selectAreaBtn').addEventListener('click', () => {
-  console.log("start-selecting-area msg send")
-  toggleSelectingArea();
+    console.log("start-selecting-area msg send")
+    toggleSelectingArea();
 });
 
 // document.getElementById('outputSelectAreaBtn').addEventListener('click', () => {
@@ -34,13 +34,12 @@ document.getElementById('selectAreaBtn').addEventListener('click', () => {
 // });
 
 
-
 document.getElementById('fixBtn').addEventListener('click', () => {
-  toggleFixing();
+    toggleFixing();
 });
 
 document.getElementById('outputBtn').addEventListener('click', () => {
-  showOutputBox();
+    showOutputBox();
 });
 
 document.addEventListener('mousedown', handleMouseDown);
@@ -49,128 +48,128 @@ document.addEventListener('mouseup', handleMouseUp);
 
 
 document.getElementById('intervalInput').addEventListener('input', (event) => {
-  // Limit user input to a minimum value of 300ms
-  captureInterval = Math.min(300, parseInt(event.target.value));
+    // Limit user input to a minimum value of 300ms
+    captureInterval = Math.min(300, parseInt(event.target.value));
 });
 
 function toggleSelectingArea() {
-  console.log('isSelecting, %s!.', isSelecting);
-  isSelecting = !isSelecting;
+    console.log('isSelecting, %s!.', isSelecting);
+    isSelecting = !isSelecting;
 
-  const captureBox = document.getElementById('captureBox');
-  captureBox.style.display = isSelecting ? 'block' : 'none';
-  if (isSelecting) {
-    stopSelectingArea();
-    startSelectingArea();
-  } else {
-    stopSelectingArea();
-  }
+    const captureBox = document.getElementById('captureBox');
+    captureBox.style.display = isSelecting ? 'block' : 'none';
+    if (isSelecting) {
+        stopSelectingArea();
+        startSelectingArea();
+    } else {
+        stopSelectingArea();
+    }
 }
 
 function startSelectingArea() {
-  ipcRenderer.send('start-selecting-area');
+    ipcRenderer.send('start-selecting-area');
 }
 
 function stopSelectingArea() {
-  // 关闭
-  ipcRenderer.send('close-selecting-area');
+    // 关闭
+    ipcRenderer.send('close-selecting-area');
 }
 
 function toggleOutputSelectingArea() {
-  isOutputSelecting = !isOutputSelecting;
+    isOutputSelecting = !isOutputSelecting;
 
-  const outputBox = document.getElementById('outputBox');
-  outputBox.style.display = isOutputSelecting ? 'block' : 'none';
+    const outputBox = document.getElementById('outputBox');
+    outputBox.style.display = isOutputSelecting ? 'block' : 'none';
 
-  if (isOutputSelecting) {
-    startOutputSelectingArea();
-  } else {
-    stopOutputSelectingArea();
-  }
+    if (isOutputSelecting) {
+        startOutputSelectingArea();
+    } else {
+        stopOutputSelectingArea();
+    }
 }
 
 function startOutputSelectingArea() {
-  // Start output selecting area logic
-  // ...
+    // Start output selecting area logic
+    // ...
 }
 
 function stopOutputSelectingArea() {
-  // Stop output selecting area logic
-  // ...
+    // Stop output selecting area logic
+    // ...
 }
 
 function startAutoCapture() {
-  intervalId = setInterval(() => {
-    captureAndCompare();
-  }, captureInterval);
+    intervalId = setInterval(() => {
+        captureAndCompare();
+    }, captureInterval);
 }
 
 function stopAutoCapture() {
-  clearInterval(intervalId);
+    clearInterval(intervalId);
 }
 
 function captureAndCompare() {
-  // Capture and compare logic
-  // ...
+    // Capture and compare logic
+    // ...
 
-  const hasChanged = compareScreenshots();
+    const hasChanged = compareScreenshots();
 
-  if (hasChanged) {
-    sendImageToServer();
-  }
+    if (hasChanged) {
+        sendImageToServer();
+    }
 }
 
 function compareScreenshots() {
-  // Compare screenshots logic
-  // ...
+    // Compare screenshots logic
+    // ...
 
-  return true; // Assuming there is always a change
+    return true; // Assuming there is always a change
 }
 
 function sendImageToServer() {
-  // WebSocket connection logic
-  // ...
+    // WebSocket connection logic
+    // ...
 
-  // For example, send captured image data
-  // socket.send(capturedImageData);
+    // For example, send captured image data
+    // socket.send(capturedImageData);
 
-  // Listen for server response
-  // socket.addEventListener('message', (event) => {
-  //   const result = event.data;
-  //   handleOutputResult(result);
-  // });
+    // Listen for server response
+    // socket.addEventListener('message', (event) => {
+    //   const result = event.data;
+    //   handleOutputResult(result);
+    // });
 
-  // Close WebSocket connection
-  // socket.close();
+    // Close WebSocket connection
+    // socket.close();
 }
 
 function createOutputOverlayWindow() {
-  // Create a new BrowserWindow for output overlay
-  // Handle mouse events in the output overlay window
-  // ...
-
-  // Listen for 'stop-output-selecting' event from main process
-  ipcRenderer.once('stop-output-selecting', () => {
-    // Close the output overlay window
+    // Create a new BrowserWindow for output overlay
+    // Handle mouse events in the output overlay window
     // ...
-  });
+
+    // Listen for 'stop-output-selecting' event from main process
+    ipcRenderer.once('stop-output-selecting', () => {
+        // Close the output overlay window
+        // ...
+    });
 }
 
 function handleOutputResult(result) {
-  const outputResults = document.getElementById('outputResults');
-  const resultElement = document.createElement('div');
-  resultElement.textContent = result;
+    const outputResults = document.getElementById('outputResults');
+    const resultElement = document.createElement('div');
+    resultElement.textContent = result;
 
-  // Display result in app
-  outputResults.appendChild(resultElement);
+    // Display result in app
+    outputResults.appendChild(resultElement);
 
-  // Save result in history
-  outputResultHistory.push(result);
+    // Save result in history
+    outputResultHistory.push(result);
 
-  // Limit history to 50 items
-  if (outputResultHistory.length > 50) {
-    outputResultHistory.shift(); // Remove the oldest result
-  }
+    // Limit history to 50 items
+    if (outputResultHistory.length > 50) {
+        outputResultHistory.shift(); // Remove the oldest result
+    }
 }
 
 // Other necessary functions and event listeners

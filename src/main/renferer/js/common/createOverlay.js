@@ -3,6 +3,7 @@
 let isMouseDown = false;
 let startX = 0, startY = 0;
 let tempOverlayBox;
+
 export function startListening(updateBox) {
     document.addEventListener('mousedown', mouseDownHandler);
     document.addEventListener('mousemove', mouseMoveHandler);
@@ -32,7 +33,8 @@ function mouseMoveHandler(event) {
 
 function mouseUpHandler(updateBox) {
     if (isMouseDown && tempOverlayBox) {
-        var x = parseFloat(tempOverlayBox.style.left), y = parseFloat(tempOverlayBox.style.top), width = parseFloat(tempOverlayBox.style.width), height = parseFloat(tempOverlayBox.style.height);
+        var x = parseFloat(tempOverlayBox.style.left), y = parseFloat(tempOverlayBox.style.top),
+            width = parseFloat(tempOverlayBox.style.width), height = parseFloat(tempOverlayBox.style.height);
         isMouseDown = false;
         updateOverlay(updateBox, '0', '0', '100%', '100%');
         removeTempOverlayBox();
@@ -40,7 +42,7 @@ function mouseUpHandler(updateBox) {
 
         console.log("mouseUpHandler msg")
         // 向主进程发送消息，请求开始或停止监听鼠标事件
-        ipcRenderer.send('overlay-stop-mouse-listening', { x, y, width, height });
+        ipcRenderer.send('overlay-stop-mouse-listening', {x, y, width, height});
     }
 }
 

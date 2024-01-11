@@ -16,24 +16,24 @@
 //     }
 //   })
 // preload.js
-const { contextBridge, ipcRenderer } = require('electron');
+const {contextBridge, ipcRenderer} = require('electron');
 const homedir = require('os').homedir;
 
 // 在页面加载完成后再尝试使用 
 window.onload = () => {
-  window.ipcRenderer = ipcRenderer;
+    window.ipcRenderer = ipcRenderer;
 
-  // try {
-  //   const { remote } = require('electron');
-  //   console.log("remote", remote);
-  //   const { desktopCapturer } = require('electron');
-  //   console.log("desktopCapturer", require('electron').desktopCapturer);
-  //   console.log("desktopCapturer", desktopCapturer);
-  //   console.log("window.desktopCapturer", window.desktopCapturer);
-  // } catch (error) {
-  //   console.error("Error loading desktopCapturer:", error);
-  // }
-  // 获取 homedir
+    // try {
+    //   const { remote } = require('electron');
+    //   console.log("remote", remote);
+    //   const { desktopCapturer } = require('electron');
+    //   console.log("desktopCapturer", require('electron').desktopCapturer);
+    //   console.log("desktopCapturer", desktopCapturer);
+    //   console.log("window.desktopCapturer", window.desktopCapturer);
+    // } catch (error) {
+    //   console.error("Error loading desktopCapturer:", error);
+    // }
+    // 获取 homedir
 
 };
 
@@ -45,7 +45,7 @@ window.onload = () => {
 // console.log(window.Draggable);
 
 contextBridge.exposeInMainWorld('electron', {
-  get: () => require('electron').remote, // 暴露获取 Electron 的 remote 模块的方法
+    get: () => require('electron').remote, // 暴露获取 Electron 的 remote 模块的方法
 });
 
 // Expose ipcRenderer to the renderer process
@@ -55,9 +55,9 @@ contextBridge.exposeInMainWorld('electron', {
 // });
 
 contextBridge.exposeInMainWorld('ipcRenderer', {
-  invoke: ipcRenderer.invoke,
-  send: (channel, data) => ipcRenderer.send(channel, data),
-  on: (channel, func) => ipcRenderer.on(channel, (event, ...args) => func(event, ...args)),
+    invoke: ipcRenderer.invoke,
+    send: (channel, data) => ipcRenderer.send(channel, data),
+    on: (channel, func) => ipcRenderer.on(channel, (event, ...args) => func(event, ...args)),
 });
 
 // 立即执行的 init 方法
@@ -65,6 +65,6 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 //   homedir: homedir(),
 // };
 contextBridge.exposeInMainWorld('init', {
-  homedir: homedir(),
+    homedir: homedir(),
 });
 

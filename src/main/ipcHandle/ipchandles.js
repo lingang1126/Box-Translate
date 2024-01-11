@@ -1,8 +1,8 @@
 // ipcHandlers.js
-const { ipcMain } = require('electron');
+const {ipcMain} = require('electron');
 
 // 内部文件导入
-const { startSelectingArea, colseSelectingArea } = require('../function/selectArea');
+const {startSelectingArea, colseSelectingArea} = require('../function/selectArea');
 // const overlayWindowModule = require('../common/overlayWindowModule.js');
 const windowManager = require('../common/windowManager');
 
@@ -29,7 +29,6 @@ function setupIPCHandlers(mainWindow) {
     // });
 
 
-    
     // ipcMain.on('update-capture-box', (event, { x, y, width, height }) => {
     //     mainWindow.webContents.send('update-capture-box', { x, y, width, height });
     // });
@@ -72,4 +71,4 @@ function setupIPCHandlers(mainWindow) {
     });
 }
 
-module.exports = { setupIPCHandlers };
+module.exports = {setupIPCHandlers};

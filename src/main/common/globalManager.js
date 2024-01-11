@@ -5,6 +5,4 @@ const globalManager = {
 };
 
 
-
-
 module.exports = globalManager;
