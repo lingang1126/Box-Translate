@@ -2,7 +2,7 @@
 const {ipcMain} = require('electron');
 
 // 内部文件导入
-const {startSelectingArea, colseSelectingArea} = require('../function/selectArea');
+const {startSelectingArea, closeSelectingArea} = require('../function/selectArea');
 // const overlayWindowModule = require('../common/overlayWindowModule.js');
 const windowManager = require('../common/windowManager');
 
@@ -17,7 +17,7 @@ function setupIPCHandlers(mainWindow) {
     // 关闭选择框
     ipcMain.on('close-selecting-area', () => {
         console.log("receive close-selecting-area msg")
-        colseSelectingArea(mainWindow);
+        closeSelectingArea(mainWindow);
     });
 
     // ipcMain.on('start-output-selecting', () => {
@@ -69,6 +69,7 @@ function setupIPCHandlers(mainWindow) {
         clearInterval(intervalId);
         console.log('Timer stopped.');
     });
+
 }
 
 module.exports = {setupIPCHandlers};

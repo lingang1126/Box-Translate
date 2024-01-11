@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 // 内部文件
 const {setupIPCHandlers} = require('./main/ipcHandle/ipchandles.js');
+const {processImage} = require('./main/common/picOptUtil');
 const overlayWindowModule = require('./main/common/overlayWindowModule.js');
 const paths = require('./path.js');
 
@@ -22,12 +23,18 @@ app.whenReady().then(() => {
     mainWindow = createWindow();
     // const overlayWindowModule = new OverlayWindowModule();
     setupIPCHandlers(mainWindow);
+    // 监听窗口关闭事件
+    mainWindow.on('closed', () => {
+        app.quit();
+    });
 });
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+    app.quit();
+    // darwin 代表mac系统 如果是windows 则是win32
+    // if (process.platform !== 'darwin') {
+    // app.quit();
+    // }
 });
 
 app.on('will-quit', () => {

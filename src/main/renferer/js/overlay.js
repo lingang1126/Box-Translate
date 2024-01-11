@@ -6,10 +6,24 @@ const selectArea = document.getElementById('selectArea');
 const closeIcon = document.querySelector('.close');
 const body = document.querySelector('body');
 
-
+let isCloseButtonDisplay = 'none';
 ipcRenderer.on('init-overlay', (event, {type, width, height}) => {
     const updateBox = document.getElementById(`${type}`);
     startListening(updateBox);
+});
+
+// 显示和隐藏 关闭符号 为了图片的识别率
+ipcRenderer.on('opt-close-display', (event, {optType}) => {
+    const closeButton = document.querySelector('.close');
+    // 当他要设置为异常 说明截图启动了 后续还有一次显示 提前记录下状态
+    if (optType === 'none') {
+        isCloseButtonDisplay = closeButton.style.display;
+    }
+    if (isCloseButtonDisplay === 'none') {
+        return;
+    }
+    console.log("接收到 opt-close-display 修改display", optType)
+    closeButton.style.display = optType;
 });
 
 
