@@ -1,0 +1,23 @@
+{
+  "name": "box-translate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "pack": "electron-packager . BOX-TRANSLATE --win --out ./dist --arch=x64 --app-version=0.0.1 --electron-version=28.1.0"
+  },
+  "engines": {
+    "node": "20.10.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "electron": "^24.8.0"
+  },
+  "devDependencies": {
+    "electron-rebuild": "^3.2.9"
+  }
+}

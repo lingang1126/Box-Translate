@@ -1,0 +1,70 @@
+<!-- overlay.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- <title>Overlay</title> -->
+  <style>
+    /* body {
+      margin: 0;
+      overflow: hidden;
+    } */
+    body,
+    html {
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    #selectArea {
+      position: absolute;
+      border: 1px dashed transparent;
+      /* pointer-events: none; */
+      border-radius: 8px;
+      background: rgb(0, 0, 0, 0.26);
+    }
+
+    /* 伪元素用于捕获鼠标事件 */
+    /* #selectArea::before { 
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    } */
+
+    .close {
+      display: none;
+      /* 初始状态隐藏 */
+    }
+
+    .close::before {
+      content: '×';
+      /* Unicode 字符，表示叉叉 */
+      position: absolute;
+      top: 0;
+      left: 10px;
+      font-size: 1.3em;
+      color: rgba(255, 255, 255, 0.90);
+      /* 设置叉叉的颜色 */
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0);
+      /* 添加透明的背景 */
+    }
+  </style>
+</head>
+
+<body>
+  <!-- <h1>cccc</h1> -->
+  <div id="selectArea"></div>
+  <div class="close"></div>
+
+  <script type="module" src=../js/overlay.js></script>
+</body>
+
+</html>
