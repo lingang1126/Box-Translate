@@ -2,8 +2,10 @@ const {BrowserWindow, ipcMain, screen, globalShortcut, desktopCapturer} = requir
 const child_process = require("child_process");
 
 const windowManager = require('../common/windowManager.js');
+const picManager = require('../common/picManager.js');
 const overlayWindowModule = require('../common/overlayWindowModule.js');
 const paths = require('../../path.js');
+
 
 let overlayWindow
 
@@ -65,10 +67,15 @@ function startSelectingArea(mainWindow) {
 
         optCloseButtonDisplay(overlayWindow, false);
 
+        let screenFlag = false;
         if (process.platform === 'darwin') {
-            macScreenCapture(x, y, width, height);
-
+            screenFlag = macScreenCapture(x, y, width, height);
         } else {
+
+        }
+
+        // 截图完成的后续操作
+        if (screenFlag) {
 
         }
     });
@@ -79,16 +86,28 @@ function startSelectingArea(mainWindow) {
  * mac 环境下截图
  */
 function macScreenCapture(x, y, width, height) {
-    const screenCommand = `screencapture -x -t jpg -R${x},${y},${width},${height} /Users/lg/soft/pic/screenshot.png`;
+    let localPic = paths.LOCAL_PIC;
+    let picId = picManager.getNextPicId();
+    let suffix = 'jpg';
+
+    let localPicPath = `${localPic}/${picId}.${suffix}`;
+    console.log(localPicPath);
+    const screenCommand = `screencapture -x -t jpg -R${x},${y},${width},${height} ${localPicPath}`;
     console.log(screenCommand);
 
     child_process.exec(screenCommand, (error, stdout, stderr) => {
-        console.log("308", error);
         if (!error) {
-            //截图完成，在粘贴板中
-            console.log("截图成功");
+            console.log("mac 截图成功");
+            let picInfo = new picManager.PicInfo(picId, localPicPath);
+            picManager.addPicInfo(picInfo);
+            picManager.processAndCheck(picId);
+        } else {
+            console.error("macScreenCapture err", error);
         }
     });
+
+
+    return picId;
 }
 
 /**

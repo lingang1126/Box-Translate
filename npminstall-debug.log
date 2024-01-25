@@ -1,13 +1,21 @@
 {
-  root: '/Users/lg/IdeaProjects/box-translate',
+  root: '/Users/lg/IdeaProjects/Box-Translate',
   registry: 'https://registry.npmmirror.com',
-  pkgs: [],
+  pkgs: [
+    {
+      name: 'phash-image',
+      version: 'latest',
+      type: 'tag',
+      alias: undefined,
+      arg: [Result]
+    }
+  ],
   production: false,
   cacheStrict: false,
   cacheDir: '/Users/lg/.npminstall_tarball',
   env: {
     npm_config_registry: 'https://registry.npmmirror.com',
-    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/lg/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com"],"original":["--fix-bug-versions","--china","--userconfig=/Users/lg/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com"]}',
+    npm_config_argv: '{"remain":[],"cooked":["--fix-bug-versions","--china","--userconfig=/Users/lg/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","phash-image"],"original":["--fix-bug-versions","--china","--userconfig=/Users/lg/.cnpmrc","--disturl=https://cdn.npmmirror.com/binaries/node","--registry=https://registry.npmmirror.com","phash-image"]}',
     npm_config_user_agent: 'npminstall/7.12.0 npm/? node/v20.10.0 darwin arm64',
     npm_config_cache: '/Users/lg/.npminstall_tarball',
     NODE: '/Users/lg/.nvm/versions/node/v20.10.0/bin/node',
@@ -41,8 +49,8 @@
     npm_config_sharp_binary_host: 'https://cdn.npmmirror.com/binaries/sharp',
     npm_config_sharp_libvips_binary_host: 'https://cdn.npmmirror.com/binaries/sharp-libvips',
     npm_config_robotjs_binary_host: 'https://cdn.npmmirror.com/binaries/robotjs',
-    npm_rootpath: '/Users/lg/IdeaProjects/box-translate',
-    INIT_CWD: '/Users/lg/IdeaProjects/box-translate'
+    npm_rootpath: '/Users/lg/IdeaProjects/Box-Translate',
+    INIT_CWD: '/Users/lg/IdeaProjects/Box-Translate'
   },
   binaryMirrors: {
     ENVS: {
@@ -177,7 +185,7 @@
   disableFallbackStore: false,
   workspacesMap: Map(0) {},
   enableWorkspace: false,
-  workspaceRoot: '/Users/lg/IdeaProjects/box-translate',
+  workspaceRoot: '/Users/lg/IdeaProjects/Box-Translate',
   isWorkspaceRoot: true,
   isWorkspacePackage: false,
   offline: false,

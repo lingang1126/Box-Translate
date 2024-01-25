@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 // 内部文件
 const {setupIPCHandlers} = require('./main/ipcHandle/ipchandles.js');
-const {processImage} = require('./main/common/picOptUtil');
+const {processImage, resetDir, imageHashCheck} = require('./main/common/picUtil');
 const overlayWindowModule = require('./main/common/overlayWindowModule.js');
 const paths = require('./path.js');
 
@@ -18,19 +18,23 @@ let isShotTaskRunning = false;
 
 
 app.whenReady().then(() => {
-    // 在主线程中通过 IPC 通信获取渲染进程中的变量值
-    // const isSelecting = getIsSelecting();
+    // 创建初始窗口
     mainWindow = createWindow();
-    // const overlayWindowModule = new OverlayWindowModule();
+
+    // 注册事件监听
     setupIPCHandlers(mainWindow);
+
+    // 重设图片文件夹
+    resetDir();
+
     // 监听窗口关闭事件
     mainWindow.on('closed', () => {
-        app.quit();
+        quitApp();
     });
 });
 
 app.on('window-all-closed', () => {
-    app.quit();
+    quitApp();
     // darwin 代表mac系统 如果是windows 则是win32
     // if (process.platform !== 'darwin') {
     // app.quit();
@@ -72,4 +76,7 @@ ipcMain.handle('saveBitmap', (event, bitmapData, path) => {
 })
 
 
-
+function quitApp() {
+    app.quit();
+    resetDir();
+}
