@@ -6,7 +6,7 @@ const path = require('path');
 const fs = require('fs');
 // 内部文件
 const {setupIPCHandlers} = require('./main/ipcHandle/ipchandles.js');
-const {processImage, resetDir, imageHashCheck} = require('./main/common/picUtil');
+const {processImage, resetDir, imageHashCheck, tesseractUtil, grayscaleAndBinarizeImageAndSave} = require('./main/common/picUtil');
 const overlayWindowModule = require('./main/common/overlayWindowModule.js');
 const paths = require('./path.js');
 
@@ -26,6 +26,14 @@ app.whenReady().then(() => {
 
     // 重设图片文件夹
     resetDir();
+
+
+    // 灰度 二值化 grayscaleAndBinarizeImageAndSave
+    // grayscaleAndBinarizeImageAndSave("/Users/lg/IdeaProjects/Box-Translate/src/pic/4.jpg", "/Users/lg/IdeaProjects/Box-Translate/src/pic/4-灰度二极化.jpg", 128);
+
+    // tesseractUtil("eng", "/Users/lg/IdeaProjects/Box-Translate/src/pic/4-灰度二极化.jpg");
+    // 识别
+    // measureExecutionTimeAndLogMain(tesseractUtil);
 
     // 监听窗口关闭事件
     mainWindow.on('closed', () => {
@@ -79,4 +87,19 @@ ipcMain.handle('saveBitmap', (event, bitmapData, path) => {
 function quitApp() {
     app.quit();
     resetDir();
+}
+
+// 在主进程中获取方法执行时间并输出
+function measureExecutionTimeAndLogMain(func) {
+    const {performance} = require('perf_hooks');
+
+    const start = performance.now();
+
+    // 执行传入的函数
+    func();
+
+    const end = performance.now();
+    const executionTime = end - start;
+
+    console.log('方法执行时间：', executionTime, '毫秒');
 }

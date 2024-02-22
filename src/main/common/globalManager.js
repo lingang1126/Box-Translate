@@ -7,6 +7,9 @@ const globalManager = {
     picId: 0,
     lastSuccessPicId: 0,
     picInfos: {},
+
+    // 是否在截图处理中
+    isCaptureIng: false,
 };
 
 

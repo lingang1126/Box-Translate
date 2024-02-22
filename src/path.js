@@ -9,6 +9,7 @@ module.exports = {
 
     INDEX_HTML: path.join(__dirname, "main", 'renferer', 'html', 'index.html'),
     OVERLAY_HTML: path.join(__dirname, "main", 'renferer', 'html', 'overlay.html'),
+    OUTPUT_HTML: path.join(__dirname, "main", 'renferer', 'html', 'output.html'),
 
     LOCAL_PIC: path.join(__dirname, "pic"),
 

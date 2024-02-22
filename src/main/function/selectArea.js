@@ -5,15 +5,16 @@ const windowManager = require('../common/windowManager.js');
 const picManager = require('../common/picManager.js');
 const overlayWindowModule = require('../common/overlayWindowModule.js');
 const paths = require('../../path.js');
-
+const globalManager = require("../common/globalManager");
+const windowName = 'overlayWindow'
 
 let overlayWindow
+
 
 // 创建
 function startSelectingArea(mainWindow) {
     // 最小化窗口
     mainWindow.minimize();
-    console.log("small");
 
     // 获取屏幕的大小
     const {width, height} = screen.getPrimaryDisplay().workAreaSize
@@ -60,6 +61,32 @@ function startSelectingArea(mainWindow) {
         overlayWindow.setIgnoreMouseEvents(false);
     });
 
+    // 定时任务发送截图通知
+    ipcMain.on('auto-notify-start-capture', () => {
+        // console.log("接收到截图的消息==========", windowManager.getWindowByName(windowName))
+        let overlayWindow = windowManager.getWindowByName(windowName)
+        if (overlayWindow === null || typeof windowManager.getWindowByName(windowName) === 'undefined') {
+            console.log("接收到截图的消息.overlayWindow为空==========")
+
+        } else {
+            console.log("接收到截图的消息.overlayWindow正常==========")
+
+            if (globalManager.isCaptureIng === false) {
+                const {x, y, width, height} = overlayWindow.getBounds();
+                optCloseButtonDisplay(overlayWindow, false);
+                macScreenCapture(x, y, width, height);
+            }else {
+                console.log("截图中 请稍后处理 ==========")
+            }
+        }
+    });
+
+
+    // 注册快捷键，根据需要修改原生截图api
+    globalShortcut.register('CommandOrControl+Alt+T', async () => {
+        dosAntt()
+    });
+
     // 注册快捷键，根据需要修改原生截图api
     globalShortcut.register('CommandOrControl+Alt+S', async () => {
         const {x, y, width, height} = overlayWindow.getBounds();
@@ -73,7 +100,6 @@ function startSelectingArea(mainWindow) {
         } else {
 
         }
-
         // 截图完成的后续操作
         if (screenFlag) {
 
@@ -86,6 +112,9 @@ function startSelectingArea(mainWindow) {
  * mac 环境下截图
  */
 function macScreenCapture(x, y, width, height) {
+    // 开始截图
+    globalManager.isCaptureIng = true;
+
     let localPic = paths.LOCAL_PIC;
     let picId = picManager.getNextPicId();
     let suffix = 'jpg';
@@ -108,6 +137,28 @@ function macScreenCapture(x, y, width, height) {
 
 
     return picId;
+}
+
+/**
+ * mac 环境下截图
+ */
+function dosAntt() {
+    // console.log("接收到截图的消息==========", windowManager.getWindowByName(windowName))
+    let overlayWindow = windowManager.getWindowByName(windowName)
+    if (overlayWindow === null || typeof windowManager.getWindowByName(windowName) === 'undefined') {
+        console.log("接收到截图的消息.overlayWindow为空==========")
+
+    } else {
+        console.log("接收到截图的消息.overlayWindow正常==========")
+
+        if (globalManager.isCaptureIng === false) {
+            const {x, y, width, height} = overlayWindow.getBounds();
+            optCloseButtonDisplay(overlayWindow, false);
+            macScreenCapture(x, y, width, height);
+        }else {
+            console.log("截图中 请稍后处理 ==========")
+        }
+    }
 }
 
 /**

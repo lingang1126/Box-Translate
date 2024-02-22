@@ -21,37 +21,32 @@ document.getElementById('selectAreaBtn').addEventListener('click', () => {
     toggleSelectingArea();
 });
 
-// document.getElementById('outputSelectAreaBtn').addEventListener('click', () => {
-//   toggleOutputSelectingArea();
-// });
-
-// document.getElementById('startAutoCaptureBtn').addEventListener('click', () => {
-//   startAutoCapture();
-// });
-
-// document.getElementById('stopAutoCaptureBtn').addEventListener('click', () => {
-//   stopAutoCapture();
-// });
-
-
-document.getElementById('fixBtn').addEventListener('click', () => {
-    toggleFixing();
+document.getElementById('outputSelectAreaBtn').addEventListener('click', () => {
+    toggleOutputSelectingArea();
 });
 
-document.getElementById('outputBtn').addEventListener('click', () => {
-    showOutputBox();
+document.getElementById('startAutoCaptureBtn').addEventListener('click', () => {
+    startAutoCapture();
 });
+
+document.getElementById('singleTransLate').addEventListener('click', () => {
+    ipcRenderer.send('auto-notify-start-capture');
+});
+
 
 document.addEventListener('mousedown', handleMouseDown);
 document.addEventListener('mousemove', handleMouseMove);
 document.addEventListener('mouseup', handleMouseUp);
 
 
-document.getElementById('intervalInput').addEventListener('input', (event) => {
-    // Limit user input to a minimum value of 300ms
-    captureInterval = Math.min(300, parseInt(event.target.value));
-});
+// document.getElementById('intervalInput').addEventListener('input', (event) => {
+//     // Limit user input to a minimum value of 300ms
+//     captureInterval = Math.min(300, parseInt(event.target.value));
+// });
 
+/**
+ * 截图覆盖框
+ */
 function toggleSelectingArea() {
     console.log('isSelecting, %s!.', isSelecting);
     isSelecting = !isSelecting;
@@ -75,33 +70,27 @@ function stopSelectingArea() {
     ipcRenderer.send('close-selecting-area');
 }
 
-function toggleOutputSelectingArea() {
-    isOutputSelecting = !isOutputSelecting;
 
-    const outputBox = document.getElementById('outputBox');
-    outputBox.style.display = isOutputSelecting ? 'block' : 'none';
-
-    if (isOutputSelecting) {
-        startOutputSelectingArea();
-    } else {
-        stopOutputSelectingArea();
-    }
-}
-
-function startOutputSelectingArea() {
-    // Start output selecting area logic
-    // ...
-}
-
-function stopOutputSelectingArea() {
-    // Stop output selecting area logic
-    // ...
-}
-
+/**
+ * 自动截图触发
+ */
 function startAutoCapture() {
+    // 校验入参是否合法
+    // 获取输入框元素
+    let intervalInput = document.getElementById('intervalInput');
+    // 获取输入框的值
+    const intervalValue = intervalInput.value;
+    console.log("输入框的值为:", intervalValue);
+    if (intervalValue < 500) {
+        alert("定时截图时间间隔不能小于500ms");
+        return;
+    }
+
+    stopAutoCapture();
     intervalId = setInterval(() => {
         captureAndCompare();
-    }, captureInterval);
+
+    }, intervalValue);
 }
 
 function stopAutoCapture() {
@@ -109,102 +98,47 @@ function stopAutoCapture() {
 }
 
 function captureAndCompare() {
-    // Capture and compare logic
-    // ...
+    console.log("定时任务执行======");
+    ipcRenderer.send('auto-notify-start-capture');
+}
 
-    const hasChanged = compareScreenshots();
 
-    if (hasChanged) {
-        sendImageToServer();
+// function handleOutputResult(result) {
+//     const outputResults = document.getElementById('outputResults');
+//     const resultElement = document.createElement('div');
+//     resultElement.textContent = result;
+//
+//     // Display result in app
+//     outputResults.appendChild(resultElement);
+//
+//     // Save result in history
+//     outputResultHistory.push(result);
+//
+//     // Limit history to 50 items
+//     if (outputResultHistory.length > 50) {
+//         outputResultHistory.shift(); // Remove the oldest result
+//     }
+// }
+
+/**
+ * 输出框
+ */
+function toggleOutputSelectingArea() {
+    isOutputSelecting = !isOutputSelecting;
+
+    if (isOutputSelecting) {
+        stopOutputSelectingArea();
+        startOutputSelectingArea();
+    } else {
+        stopOutputSelectingArea();
     }
 }
 
-function compareScreenshots() {
-    // Compare screenshots logic
-    // ...
-
-    return true; // Assuming there is always a change
+function startOutputSelectingArea() {
+    ipcRenderer.send('notify-start-output-selecting');
 }
 
-function sendImageToServer() {
-    // WebSocket connection logic
-    // ...
-
-    // For example, send captured image data
-    // socket.send(capturedImageData);
-
-    // Listen for server response
-    // socket.addEventListener('message', (event) => {
-    //   const result = event.data;
-    //   handleOutputResult(result);
-    // });
-
-    // Close WebSocket connection
-    // socket.close();
+function stopOutputSelectingArea() {
+    ipcRenderer.send('notify-stop-output-selecting');
 }
-
-function createOutputOverlayWindow() {
-    // Create a new BrowserWindow for output overlay
-    // Handle mouse events in the output overlay window
-    // ...
-
-    // Listen for 'stop-output-selecting' event from main process
-    ipcRenderer.once('stop-output-selecting', () => {
-        // Close the output overlay window
-        // ...
-    });
-}
-
-function handleOutputResult(result) {
-    const outputResults = document.getElementById('outputResults');
-    const resultElement = document.createElement('div');
-    resultElement.textContent = result;
-
-    // Display result in app
-    outputResults.appendChild(resultElement);
-
-    // Save result in history
-    outputResultHistory.push(result);
-
-    // Limit history to 50 items
-    if (outputResultHistory.length > 50) {
-        outputResultHistory.shift(); // Remove the oldest result
-    }
-}
-
-// Other necessary functions and event listeners
-
-// function handleMouseDown(event) {
-//   if (isSelecting) {
-//     // Set initial position of the capture box
-//     const { pageX, pageY } = event;
-//     captureBox.style.left = `${pageX}px`;
-//     captureBox.style.top = `${pageY}px`;
-
-//     // Add a class for a smooth transition effect
-//     captureBox.classList.add('capture-transition');
-//   }
-// }
-
-// function handleMouseMove(event) {
-//   if (isSelecting) {
-//     // Update size of the capture box while mouse is moved
-//     const { pageX, pageY } = event;
-//     const left = parseInt(captureBox.style.left);
-//     const top = parseInt(captureBox.style.top);
-
-//     const width = pageX - left;
-//     const height = pageY - top;
-
-//     captureBox.style.width = `${width}px`;
-//     captureBox.style.height = `${height}px`;
-//   }
-// }
-
-// function handleMouseUp() {
-//   if (isSelecting) {
-//     // Remove transition class after mouse is released
-//     captureBox.classList.remove('capture-transition');
-//   }
-// }
 

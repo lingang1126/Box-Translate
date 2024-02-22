@@ -40,7 +40,7 @@ function mouseUpHandler(updateBox) {
         removeTempOverlayBox();
         stopListening();
 
-        console.log("mouseUpHandler msg")
+        console.log("mouseUpHandler msg");
         // 向主进程发送消息，请求开始或停止监听鼠标事件
         ipcRenderer.send('overlay-stop-mouse-listening', {x, y, width, height});
     }
