@@ -111,7 +111,7 @@ async function processAndCheck(picId) {
 
     // 图片预处理
     // 灰度 二值化 grayscaleAndBinarizeImageAndSave
-    const modifiedFilePath = filePath.replace('.jpg', '-灰度二极化.jpg');
+    const modifiedFilePath = filePath.replace('.jpg', '-灰度二值化.jpg');
     await grayscaleAndBinarizeImageAndSave(filePath, modifiedFilePath, 128);
 
     // 5. ocr

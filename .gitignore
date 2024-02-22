@@ -4,3 +4,5 @@ node_modules/
 .idea/
 
 npminstall-debug.log
+
+src/pic/
